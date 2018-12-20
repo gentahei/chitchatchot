@@ -2,18 +2,18 @@ var express = require('express'),
     app = express(),
     http = require('http').Server(app),
     io = require('socket.io')(http),
-    port = 5000
+    port = process.env.PORT || 8000
 
-app.set('view engine', 'ejs')
-app.use(express.static('public'))
+app.set('view engine', 'ejs');
+app.use(express.static(__dirname + '/public'));
 
-app.get('/', (req,res) => {
+app.get('/', (req, res) => {
     res.render('index')
 })
 
 io.on('connect', (socket) => {
     socket.on('new_message', (data) => {
-        io.emit('new_message', { username : data.username, message : data.message, colour: data.colour })
+        io.emit('new_message', { username: data.username, message: data.message, colour: data.colour })
     })
 })
 
