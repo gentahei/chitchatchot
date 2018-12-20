@@ -1,0 +1,72 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script>
+        $(function () {
+            function colour() {
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+
+            var socket = io(),
+                username = $('#username'),
+                message = $('#message'),
+                room = $('#messages'),
+                colourText = colour()
+
+
+            $('form').submit(function () {
+                var usr = username.val()
+                if (usr == '') usr = 'Anonymous'
+                socket.emit('new_message', { username: usr, message: message.val(), colour: colourText });
+                message.val('');
+                return false;
+            })
+            socket.on('new_message', function (data) {
+                room.append('<p style="color: ' + data.colour + '">' + data.username + ' : ' + data.message + '</p>')
+                room.scrollTop(room.height())
+            })
+        })
+
+    </script>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+
+<body style="padding-top: 5%">
+    <div class="container">
+        <h1>Simple Chat App</h1>
+
+        <br>
+
+        <ul id="messages" style="height: 600px; overflow-y: hidden font"></ul>
+
+        <div class="container">
+            <form action="">
+                <div class="input-group mb-3 col-sm-4">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Chat As</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Anonymous ..." id="username">
+                </div>
+
+                <div class="input-group mb-3 col-sm-12">
+                    <input type="text" class="form-control" placeholder="Message ..." id="message">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-primary">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>
