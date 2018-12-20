@@ -1,2 +1,2 @@
 # chitchatchot
-![](example.gif)
+
