@@ -2,7 +2,7 @@ var express = require('express'),
     app = express(),
     http = require('http').Server(app),
     io = require('socket.io')(http),
-    port = 8000
+    port = 5000
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
